@@ -1,12 +1,4 @@
-//Budget - Tracker
-
-
-
 // Declare variables
-
-
-
-
 let balance = 0;
 const transactions = [];
 const categories = [ "Food", "Transport", "Entertainment", "Bills", "Other"];
@@ -14,31 +6,35 @@ const categories = [ "Food", "Transport", "Entertainment", "Bills", "Other"];
 // TODO: Complete the function to add a transaction with validation and update balance
 function addTransaction(amount, type, category) {
     // Hint: Use if statements to check if the amount is a positive number,
-    if(amount< 0 || typeof amount !== 'number'){
-        console.log(`Invalid Amount : ${amount}`)
+    if ( amount < 0 || typeof amount !== 'number'){
+        console.log("Invalid Amount : " , amount);
         return;
     }
     // if the type is "income" or "expense", and if the category is in the categories array.
-    if(type !== "income" && type!=="expense"){
-         console.log(`Invalid type :${type} `)
-            return;
-    }
-
-    // If valid, create a transaction object and use transactions.push() to add it to the array.
-
-    if (!categories.includes(category)) {
-        console.log(`Invalid Category: ${category}`);
+    if (type !== "income" && type !== "expense"){
+        console.log("Invalid type : " , type);
         return;
     }
+    let isFound = false;
+    for(let i = 0 ; i < categories.length ; i++){
+        if(category === categories[i]){
+            isFound = true;
+        }
+    }
+    if(!isFound){
+        console.log("Invalid Category : " , category);
+        return;
+    }
+    // If valid, create a transaction object and use transactions.push() to add it to the array.
+    let transactionObj = {amount , type , category};
+    transactions.push(transactionObj);
     // Use a ternary operator to update the balance.
-    let transactionObj = {amount , type , category}
-    transactions.push(transactionObj)
-
-    balance += type === 'expense'? -amount : amount
+    balance += type === 'income' ? amount : -amount;
 }
 
 // TODO: Complete the function to calculate total expenses for each category
 function getCategorySummary() {
+
     // Hint: Create an empty object for summary.
     let sum = {};
     // Use a for...of loop to initialize each category in summary to 0.
@@ -47,9 +43,9 @@ function getCategorySummary() {
     }
     // Use another for...of loop to go through transactions and add up expenses for each category.
     for (let trans of transactions){
-       if(trans.type == "expense"){
-        sum[trans.category] += trans.amount
-       }
+        if(trans.type === 'expense'){
+            sum[trans.category] += trans.amount;
+        }
     }
     return sum;
 }
@@ -64,6 +60,8 @@ function showBudgetStatus() {
     for (let i in getSum){
         console.log(`${i} : ${getSum[i]}$`)
     }
+
+
 }
 
 
